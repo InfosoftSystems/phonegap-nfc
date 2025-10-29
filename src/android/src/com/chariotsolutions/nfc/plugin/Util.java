@@ -142,4 +142,21 @@ public class Util {
         return json;
     }
 
+    static JSONObject uriToNdefJson(String uri) {
+        JSONObject json = new JSONObject();
+        if (uri == null || uri.isBlank()) { return json; }
+
+        try {
+            byte[] id = new byte[7];
+            Arrays.fill(id, (byte) 0);
+            json.put("id", byteArrayToJSON(id));
+
+            NdefMessage message = new NdefMessage(NdefRecord.createUri(uri));
+            json.put("ndefMessage", messageToJSON(message));
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to create json from uri: " + uri, e);
+        }
+        return json;
+    }
+
 }
